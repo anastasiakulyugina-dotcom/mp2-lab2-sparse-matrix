@@ -1,10 +1,20 @@
-#file(GLOB TEST_SOURCES "*.cpp")
+cmake_minimum_required(VERSION 3.12)
 
-set(TEST_SOURCES test_csr.cpp)
+set(TEST_SOURCES test_arithmetic.cpp) 
+add_executable(arithmetic_tests ${TEST_SOURCES})
 
-add_executable(sparse_tests ${TEST_SOURCES})
+target_include_directories(arithmetic_tests PRIVATE 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../googletest/googletest/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../googletest/googletest"
+)
 
-target_link_libraries(sparse_tests PRIVATE gtest gtest_main sparse_matrix)
+target_sources(arithmetic_tests PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/../googletest/googletest/src/gtest-all.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../googletest/googletest/src/gtest_main.cc"
+)
+find_package(Threads REQUIRED)
+target_link_libraries(arithmetic_tests PRIVATE Threads::Threads)
 
 include(GoogleTest)
-gtest_discover_tests(sparse_tests DISCOVERY_MODE PRE_TEST)
+gtest_discover_tests(arithmetic_tests DISCOVERY_MODE PRE_TEST)
